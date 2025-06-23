@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import des polices Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&display=swap');
+
+/* Variables CSS personnalisées */
+:root {
+  --duolingo-green: #58CC02;
+  --duolingo-orange: #FF9600;
+  --duolingo-purple: #CE82FF;
+  --duolingo-background: #F7F7FF;
+  --duolingo-card: #FFFFFF;
+  --duolingo-text: #4B4B4B;
+}
+
+/* Reset et styles de base */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: 'Inter', 'Nunito', system-ui, sans-serif;
+  background-color: var(--duolingo-background);
+  color: var(--duolingo-text);
+  line-height: 1.6;
+}
+
+/* Classes utilitaires personnalisées */
+@layer utilities {
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+  
+  @keyframes glow {
+    0% { box-shadow: 0 0 5px rgba(88, 204, 2, 0.5); }
+    100% { box-shadow: 0 0 20px rgba(88, 204, 2, 0.8); }
+  }
+} 

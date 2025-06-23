@@ -1,0 +1,297 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+Prompt détaillé pour Cursor - Configuration du projet
+text
+# RÈGLES CURSOR - PROJET CALCULATRICES FINANCIÈRES GAMIFIÉES
+
+## CONTEXTE DU PROJET
+Tu vas créer un site web de calculatrices financières avec une approche gamifiée inspirée de Duolingo. Le site doit être moderne, coloré, fun et extrêmement fonctionnel.
+
+## STACK TECHNIQUE OBLIGATOIRE
+- Next.js 15 avec App Router (dernière version)
+- React 18+ avec Server Components
+- TypeScript strict
+- Tailwind CSS pour le styling
+- Framer Motion pour les animations
+- Zustand pour la gestion d'état
+- React Hook Form + Zod pour les formulaires et validation
+- Chart.js ou Recharts pour les graphiques
+- Lucide React pour les icônes
+- NextAuth.js pour l'authentification
+- Prisma + PostgreSQL (ou Supabase) pour la base de données
+
+## ARCHITECTURE DU PROJET
+src/
+├── app/
+│ ├── (dashboard)/
+│ │ ├── calculators/
+│ │ │ ├── credit/
+│ │ │ ├── investment/
+│ │ │ ├── retirement/
+│ │ │ └── taxes/
+│ │ ├── profile/
+│ │ ├── leaderboard/
+│ │ └── achievements/
+│ ├── auth/
+│ ├── api/
+│ │ ├── calculations/
+│ │ ├── gamification/
+│ │ └── user/
+│ ├── globals.css
+│ └── layout.tsx
+├── components/
+│ ├── ui/ (shadcn/ui components)
+│ ├── calculators/
+│ ├── gamification/
+│ └── charts/
+├── lib/
+│ ├── calculations/
+│ ├── gamification/
+│ └── utils/
+└── types/
+
+text
+
+## DESIGN SYSTEM - INSPIRATION DUOLINGO
+
+### PALETTE DE COULEURS VIBRANTES
+- Primaire : #58CC02 (vert Duolingo)
+- Secondaire : #FF9600 (orange énergique)
+- Accent : #CE82FF (violet créatif)
+- Danger/Alerte : #FF4B4B
+- Succès : #00CD9C
+- Background : #F7F7FF (très légèrement teinté)
+- Cartes : Blanc avec ombres douces
+- Texte : #4B4B4B (gris sombre)
+
+### TYPOGRAPHIE
+- Police principale : Inter ou Nunito (moderne et lisible)
+- Tailles : text-xs à text-6xl (système Tailwind)
+- Poids : de font-normal à font-bold
+
+### COMPOSANTS UI OBLIGATOIRES
+- Boutons avec animations hover/focus
+- Cartes avec ombres et bordures arrondies
+- Progress bars animées
+- Badges colorés pour les achievements
+- Modals/overlays avec backdrop blur
+- Toasts pour les notifications
+- Skeleton loaders
+- Dark mode complet
+
+## FONCTIONNALITÉS GAMIFICATION
+
+### SYSTÈME DE POINTS
+- Points gagnés par calcul effectué (5-50 pts selon complexité)
+- Bonus quotidien de connexion
+- Multiplicateurs pour les streaks
+- Points spéciaux pour les premiers usages
+
+### ACHIEVEMENTS/BADGES
+- Badge "Premier Calcul"
+- Badge "Marathonien" (100 calculs)
+- Badge "Stratège" (utilisation de tous les calculateurs)
+- Badge "Précis" (paramètres avancés utilisés)
+- Badge "Régulier" (7 jours consécutifs)
+- Badge "Expert" (utilisation de fonctions avancées)
+
+### SYSTÈME DE NIVEAUX
+- Niveau basé sur l'expérience totale
+- Débloquage de fonctionnalités par niveau
+- Avatars et personnalisation par niveau
+- Classement mensuel et annuel
+
+### DÉFIS ET MISSIONS
+- Défi quotidien : "Calcule ton budget du mois"
+- Défi hebdomadaire : "Optimise 3 scénarios d'investissement"
+- Missions spéciales pour découvrir nouvelles fonctionnalités
+
+## CALCULATRICES À IMPLÉMENTER
+
+### 1. CRÉDIT ET EMPRUNT
+#### Calculateur de crédit immobilier
+- Montant, durée, taux, assurance
+- Tableau d'amortissement complet
+- Graphique évolution capital/intérêts
+- Impact des remboursements anticipés
+- Comparaison de plusieurs offres
+
+#### Simulateur de rachat de crédit
+- Saisie de plusieurs crédits existants
+- Calcul du nouveau crédit consolidé
+- Économies potentielles
+- Durée optimale
+
+#### Capacité d'emprunt
+- Revenus, charges, situation familiale
+- Calcul selon ratios bancaires
+- Simulation avec co-emprunteur
+- Impact des différents apports
+
+### 2. ÉPARGNE ET INVESTISSEMENT
+#### Simulateur d'épargne
+- Versement initial, versements réguliers
+- Taux d'intérêt, capitalisation
+- Projection graphique sur N années
+- Comparaison inflation
+
+#### Calculateur d'investissement
+- Actions, obligations, fonds, crypto
+- Simulation Monte Carlo
+- Calcul de rendement attendu
+- Analyse risque/rendement
+- Répartition d'actifs optimale
+
+#### Comparateur de placements
+- Livrets, assurance-vie, PEA, PER
+- Fiscalité intégrée
+- Tableaux comparatifs
+- Recommandations personnalisées
+
+### 3. RETRAITE
+#### Estimateur de retraite
+- Carrière, cotisations, régimes
+- Projection des pensions
+- Déficit/excédent prévu
+- Rachats de trimestres
+
+#### Planificateur de retraite
+- Objectifs de revenus
+- Épargne nécessaire
+- Stratégies d'investissement
+- Décaissement optimal
+
+### 4. FISCALITÉ
+#### Simulateur d'impôt
+- Revenus, situation, déductions
+- Calcul IR, prélèvements sociaux
+- Optimisation fiscale
+- Impact des investissements
+
+#### Calculateur de plus-values
+- Plus-values mobilières/immobilières
+- Abattements, exonérations
+- Optimisation fiscale
+
+### 5. BUDGET ET PATRIMOINE
+#### Gestionnaire de budget
+- Revenus, dépenses par catégorie
+- Visualisations graphiques
+- Alertes et conseils
+- Projections
+
+#### Bilan patrimonial
+- Actifs, passifs
+- Évolution dans le temps
+- Ratios financiers
+- Recommandations
+
+## FONCTIONNALITÉS AVANCÉES
+
+### ANALYSES ET RAPPORTS
+- Génération PDF personnalisés
+- Exports Excel/CSV
+- Rapports détaillés avec graphiques
+- Historique des simulations
+- Comparaisons temporelles
+
+### IA ET PERSONNALISATION
+- Recommandations basées sur l'usage
+- Conseils contextuels
+- Détection d'optimisations
+- Alertes personnalisées
+
+### FONCTIONNALITÉS COLLABORATIVES
+- Partage de simulations (anonyme)
+- Forum communautaire
+- Comparaisons avec moyennes
+- Témoignages d'utilisateurs
+
+### TESTS DE RÉSISTANCE
+- Scénarios de crise économique
+- Impact hausse des taux
+- Simulations d'inflation
+- Tests de volatilité
+
+## INTERFACE UTILISATEUR
+
+### PAGE D'ACCUEIL
+- Hero section colorée avec CTA
+- Carrousel des calculatrices populaires
+- Témoignages et statistiques
+- Section gamification (classements)
+
+### DASHBOARD UTILISATEUR
+- Vue d'ensemble des achievements
+- Calculatrices récentes
+- Progression et niveau
+- Défis en cours
+
+### PAGES CALCULATRICES
+- Interface simple et intuitive
+- Paramètres de base et avancés
+- Résultats en temps réel
+- Graphiques interactifs
+- Boutons de partage et sauvegarde
+
+### PROFIL UTILISATEUR
+- Statistiques personnelles
+- Collection de badges
+- Historique des calculs
+- Paramètres et préférences
+
+## PERFORMANCE ET OPTIMISATION
+- Images optimisées (WebP, AVIF)
+- Lazy loading des composants
+- Code splitting par route
+- Mise en cache intelligente
+- PWA avec service worker
+- Score Lighthouse > 90
+
+## SÉCURITÉ
+- Validation stricte des inputs
+- Sanitisation des données
+- Chiffrement des données sensibles
+- Audit de sécurité régulier
+- Conformité RGPD
+
+## ACCESSIBILITÉ
+- Navigation au clavier
+- Lecteurs d'écran
+- Contrastes suffisants
+- Textes alternatifs
+- ARIA labels
+
+## ANIMATIONS ET INTERACTIONS
+- Transitions fluides entre pages
+- Animations de chargement
+- Feedback visuel immédiat
+- Micro-interactions sur les boutons
+- Animations de récompenses (confettis)
+
+## RESPONSIVE DESIGN
+- Mobile-first approach
+- Breakpoints : sm, md, lg, xl, 2xl
+- Navigation adaptée mobile
+- Graphiques redimensionnables
+- Touch-friendly sur mobile
+
+## TESTS ET QUALITÉ
+- Tests unitaires (Jest, React Testing Library)
+- Tests d'intégration
+- Tests E2E (Playwright)
+- Linting (ESLint, Prettier)
+- Type checking strict
+
+## DÉPLOIEMENT
+- Vercel pour l'hosting
+- Variables d'environnement sécurisées
+- CI/CD automatisé
+- Monitoring et analytics
+- Error tracking (Sentry)
+
+
+IMPÉRATIF : Respecte scrupuleusement ces règles. Commence toujours par la structure de base avec les composants UI fondamentaux avant d'implémenter les calculatrices. Privilégie la qualité du code et l'expérience utilisateur.
