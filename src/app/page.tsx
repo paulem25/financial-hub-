@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Calculator, TrendingUp, PiggyBank, Home, Receipt, Trophy, Star, Users, Zap } from 'lucide-react';
+import { Calculator, TrendingUp, PiggyBank, Home, Trophy, Star, Users, Zap } from 'lucide-react';
 
 export default function HomePage() {
   return (
@@ -205,7 +205,7 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-600 italic">"{testimonial.comment}"</p>
+                <p className="text-gray-600 italic">&ldquo;{testimonial.comment}&rdquo;</p>
               </motion.div>
             ))}
           </div>
