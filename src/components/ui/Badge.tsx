@@ -35,12 +35,7 @@ const rarityIcons = {
   legendary: Medal,
 };
 
-const rarityColors = {
-  common: 'text-gray-600',
-  rare: 'text-blue-500',
-  epic: 'text-purple-500',
-  legendary: 'text-yellow-500',
-};
+
 
 export function Badge({
   type,
