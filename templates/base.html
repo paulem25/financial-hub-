@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Agent IA Financier Gamifié{% endblock %}</title>
+    
+    <!-- Meta tags -->
+    <meta name="description" content="Agent IA financier gamifié avec calculatrices interactives inspiré de Duolingo">
+    <meta name="keywords" content="finance, calculatrice, gamification, IA, investissement, crédit, retraite">
+    <meta name="author" content="Agent IA Financier">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}">
+    
+    <!-- CSS Frameworks -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --duolingo-green: #58cc02;
+            --duolingo-green-dark: #4caf50;
+            --duolingo-blue: #1cb0f6;
+            --duolingo-orange: #ff9600;
+            --duolingo-purple: #ce82ff;
+            --duolingo-red: #ff4b4b;
+            --duolingo-yellow: #ffc800;
+            --duolingo-gray: #777777;
+            --duolingo-light-gray: #f7f7f7;
+            --duolingo-dark: #3c3c41;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--duolingo-light-gray) 0%, #ffffff 100%);
+            min-height: 100vh;
+        }
+        
+        .duolingo-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        
+        .duolingo-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        .duolingo-button {
+            background: var(--duolingo-green);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .duolingo-button:hover {
+            background: var(--duolingo-green-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(88, 204, 2, 0.3);
+        }
+        
+        .duolingo-button-secondary {
+            background: transparent;
+            color: var(--duolingo-green);
+            border: 2px solid var(--duolingo-green);
+        }
+        
+        .duolingo-button-secondary:hover {
+            background: var(--duolingo-green);
+            color: white;
+        }
+        
+        .xp-bar {
+            background: #e5e7eb;
+            border-radius: 8px;
+            height: 8px;
+            overflow: hidden;
+        }
+        
+        .xp-progress {
+            background: linear-gradient(90deg, var(--duolingo-green), var(--duolingo-blue));
+            height: 100%;
+            transition: width 0.8s ease;
+        }
+        
+        .badge {
+            background: linear-gradient(135deg, var(--duolingo-orange), var(--duolingo-yellow));
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .navbar-sticky {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        
+        .streak-flame {
+            background: linear-gradient(135deg, var(--duolingo-orange), var(--duolingo-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .level-badge {
+            background: linear-gradient(135deg, var(--duolingo-purple), var(--duolingo-blue));
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--duolingo-green);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .ai-chat-bubble {
+            background: linear-gradient(135deg, var(--duolingo-blue), var(--duolingo-purple));
+            color: white;
+            padding: 12px 20px;
+            border-radius: 20px 20px 20px 4px;
+            margin: 8px 0;
+            max-width: 80%;
+        }
+        
+        .user-chat-bubble {
+            background: var(--duolingo-light-gray);
+            color: var(--duolingo-dark);
+            padding: 12px 20px;
+            border-radius: 20px 20px 4px 20px;
+            margin: 8px 0;
+            max-width: 80%;
+            margin-left: auto;
+        }
+        
+        .calculator-input {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .calculator-input:focus {
+            border-color: var(--duolingo-green);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(88, 204, 2, 0.1);
+        }
+        
+        .floating-action-button {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--duolingo-green);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .floating-action-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--duolingo-green);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .bounce {
+            animation: bounce 0.6s ease-out;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% { transform: translate3d(0, 0, 0); }
+            40%, 43% { transform: translate3d(0, -20px, 0); }
+            70% { transform: translate3d(0, -10px, 0); }
+            90% { transform: translate3d(0, -4px, 0); }
+        }
+        
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+        
+        @media (max-width: 768px) {
+            .duolingo-card {
+                margin: 0 16px;
+                border-radius: 12px;
+            }
+            
+            .floating-action-button {
+                width: 50px;
+                height: 50px;
+                bottom: 16px;
+                right: 16px;
+            }
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="navbar navbar-sticky">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="{{ url_for('index') }}" class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-blue-500 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-robot text-white text-xl"></i>
+                        </div>
+                        <span class="text-xl font-bold text-gray-800">Agent IA Financier</span>
+                    </a>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-6">
+                    {% if session.user_id %}
+                        <a href="{{ url_for('dashboard') }}" class="text-gray-700 hover:text-green-600 font-medium transition-colors">
+                            <i class="fas fa-tachometer-alt mr-2"></i>Tableau de bord
+                        </a>
+                        <a href="{{ url_for('calculators') }}" class="text-gray-700 hover:text-green-600 font-medium transition-colors">
+                            <i class="fas fa-calculator mr-2"></i>Calculatrices
+                        </a>
+                        <a href="{{ url_for('ai_assistant_page') }}" class="text-gray-700 hover:text-green-600 font-medium transition-colors">
+                            <i class="fas fa-robot mr-2"></i>Assistant IA
+                        </a>
+                        <a href="{{ url_for('leaderboard_page') }}" class="text-gray-700 hover:text-green-600 font-medium transition-colors">
+                            <i class="fas fa-trophy mr-2"></i>Classements
+                        </a>
+                        
+                        <!-- User Profile -->
+                        <div class="flex items-center space-x-3 ml-4 pl-4 border-l border-gray-200">
+                            <div class="level-badge">{{ session.get('user_level', 1) }}</div>
+                            <div class="text-sm">
+                                <div class="font-medium text-gray-800">{{ session.username }}</div>
+                                <div class="text-gray-600">{{ session.get('user_xp', 0) }} XP</div>
+                            </div>
+                            <div class="relative">
+                                <button onclick="toggleUserMenu()" class="text-gray-700 hover:text-green-600">
+                                    <i class="fas fa-user-circle text-xl"></i>
+                                </button>
+                                <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                                    <a href="{{ url_for('profile_page') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-50">
+                                        <i class="fas fa-user mr-2"></i>Profil
+                                    </a>
+                                    <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-50">
+                                        <i class="fas fa-sign-out-alt mr-2"></i>Déconnexion
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="text-gray-700 hover:text-green-600 font-medium">Connexion</a>
+                        <a href="{{ url_for('register') }}" class="duolingo-button">Inscription</a>
+                    {% endif %}
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-gray-700 hover:text-green-600">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu md:hidden fixed inset-0 bg-white z-50">
+            <div class="p-4">
+                <div class="flex justify-between items-center mb-8">
+                    <span class="text-xl font-bold">Menu</span>
+                    <button onclick="toggleMobileMenu()" class="text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                {% if session.user_id %}
+                    <div class="space-y-4">
+                        <a href="{{ url_for('dashboard') }}" class="block py-3 text-gray-700 border-b border-gray-200">
+                            <i class="fas fa-tachometer-alt mr-3"></i>Tableau de bord
+                        </a>
+                        <a href="{{ url_for('calculators') }}" class="block py-3 text-gray-700 border-b border-gray-200">
+                            <i class="fas fa-calculator mr-3"></i>Calculatrices
+                        </a>
+                        <a href="{{ url_for('ai_assistant_page') }}" class="block py-3 text-gray-700 border-b border-gray-200">
+                            <i class="fas fa-robot mr-3"></i>Assistant IA
+                        </a>
+                        <a href="{{ url_for('leaderboard_page') }}" class="block py-3 text-gray-700 border-b border-gray-200">
+                            <i class="fas fa-trophy mr-3"></i>Classements
+                        </a>
+                        <a href="{{ url_for('profile_page') }}" class="block py-3 text-gray-700 border-b border-gray-200">
+                            <i class="fas fa-user mr-3"></i>Profil
+                        </a>
+                        <a href="{{ url_for('logout') }}" class="block py-3 text-red-600">
+                            <i class="fas fa-sign-out-alt mr-3"></i>Déconnexion
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="space-y-4">
+                        <a href="{{ url_for('login') }}" class="block py-3 text-gray-700 border-b border-gray-200">Connexion</a>
+                        <a href="{{ url_for('register') }}" class="duolingo-button w-full text-center">Inscription</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="fixed top-20 right-4 z-50 space-y-2">
+                {% for message in messages %}
+                    <div class="notification show bg-blue-500 text-white p-4 rounded-lg shadow-lg">
+                        {{ message }}
+                        <button onclick="this.parentElement.remove()" class="ml-2 text-white">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-blue-500 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-robot text-white"></i>
+                        </div>
+                        <span class="text-lg font-bold">Agent IA Financier</span>
+                    </div>
+                    <p class="text-gray-400">Votre assistant financier intelligent avec gamification inspirée de Duolingo.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Calculatrices</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="{{ url_for('mortgage_calculator_page') }}" class="hover:text-white">Crédit Immobilier</a></li>
+                        <li><a href="{{ url_for('investment_calculator_page') }}" class="hover:text-white">Investissement</a></li>
+                        <li><a href="{{ url_for('retirement_calculator_page') }}" class="hover:text-white">Retraite</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Fonctionnalités</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="{{ url_for('ai_assistant_page') }}" class="hover:text-white">Assistant IA</a></li>
+                        <li><a href="{{ url_for('leaderboard_page') }}" class="hover:text-white">Classements</a></li>
+                        <li><a href="#" class="hover:text-white">Badges & Récompenses</a></li>
+                        <li><a href="#" class="hover:text-white">API Développeurs</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><i class="fas fa-envelope mr-2"></i>contact@agent-ia-financier.com</li>
+                        <li><i class="fas fa-phone mr-2"></i>+33 1 23 45 67 89</li>
+                        <li><i class="fas fa-map-marker-alt mr-2"></i>Paris, France</li>
+                    </ul>
+                    <div class="mt-4 flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400">&copy; 2024 Agent IA Financier. Tous droits réservés.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-400 hover:text-white">Politique de confidentialité</a>
+                    <a href="#" class="text-gray-400 hover:text-white">Conditions d'utilisation</a>
+                    <a href="#" class="text-gray-400 hover:text-white">API</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Floating Action Button for AI Assistant -->
+    {% if session.user_id %}
+    <button onclick="openAIChat()" class="floating-action-button" title="Assistant IA">
+        <i class="fas fa-robot text-xl"></i>
+    </button>
+    {% endif %}
+    
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Menu Toggle Functions
+        function toggleUserMenu() {
+            const menu = document.getElementById('userMenu');
+            menu.classList.toggle('hidden');
+        }
+        
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('open');
+        }
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            const userMenu = document.getElementById('userMenu');
+            const userButton = event.target.closest('[onclick="toggleUserMenu()"]');
+            
+            if (!userButton && userMenu && !userMenu.contains(event.target)) {
+                userMenu.classList.add('hidden');
+            }
+        });
+        
+        // Notification System
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white p-4 rounded-lg shadow-lg`;
+            notification.innerHTML = `
+                ${message}
+                <button onclick="this.parentElement.remove()" class="ml-2 text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+        
+        // XP Animation
+        function animateXP(element, targetXP) {
+            let currentXP = 0;
+            const increment = targetXP / 50;
+            const timer = setInterval(() => {
+                currentXP += increment;
+                if (currentXP >= targetXP) {
+                    currentXP = targetXP;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(currentXP);
+            }, 20);
+        }
+        
+        // Badge Animation
+        function showBadgeUnlocked(badge) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="duolingo-card p-8 text-center max-w-md bounce">
+                    <div class="text-6xl mb-4">${badge.icon}</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Nouveau Badge Débloqué !</h3>
+                    <h4 class="text-lg font-semibold text-green-600 mb-2">${badge.name}</h4>
+                    <p class="text-gray-600 mb-6">${badge.description}</p>
+                    <button onclick="this.parentElement.parentElement.remove()" class="duolingo-button">
+                        Continuer
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            setTimeout(() => {
+                modal.remove();
+            }, 10000);
+        }
+        
+        // AI Chat Functions
+        function openAIChat() {
+            window.location.href = "{{ url_for('ai_assistant_page') }}";
+        }
+        
+        // Auto-refresh stats every 30 seconds
+        setInterval(function() {
+            const statsElements = document.querySelectorAll('.live-stat');
+            if (statsElements.length > 0) {
+                fetch('/api/live-stats')
+                    .then(response => response.json())
+                    .then(data => {
+                        statsElements.forEach(element => {
+                            const statType = element.dataset.stat;
+                            if (data[statType]) {
+                                element.textContent = data[statType];
+                            }
+                        });
+                    })
+                    .catch(error => console.log('Stats update failed:', error));
+            }
+        }, 30000);
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Loading states for forms
+        function setLoading(element, loading = true) {
+            if (loading) {
+                element.disabled = true;
+                element.innerHTML = '<span class="loader mr-2"></span>Chargement...';
+            } else {
+                element.disabled = false;
+                element.innerHTML = element.dataset.originalText || 'Calculer';
+            }
+        }
+        
+        // Initialize tooltips (if using any tooltip library)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add any initialization code here
+            
+            // Store original button texts
+            document.querySelectorAll('button[type="submit"]').forEach(button => {
+                button.dataset.originalText = button.textContent;
+            });
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,429 @@
+{% extends "base.html" %}
+
+{% block title %}Agent IA Financier Gamifié - Maîtrisez vos finances en vous amusant !{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative overflow-hidden pt-20 pb-16 px-4">
+    <div class="max-w-7xl mx-auto text-center">
+        <div class="slide-in">
+            <h1 class="text-4xl md:text-6xl font-bold text-gray-800 mb-6">
+                Maîtrisez vos
+                <span class="text-green-500">finances</span>
+                <br />
+                en vous amusant ! 🎮
+            </h1>
+            
+            <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                Agent IA financier gamifié avec calculatrices interactives inspiré de Duolingo. 
+                Gagnez des points, débloquez des badges et progressez dans la maîtrise de vos finances 
+                avec l'aide de votre assistant IA personnel !
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+                {% if user_logged_in %}
+                    <a href="{{ url_for('dashboard') }}" class="duolingo-button">
+                        <i class="fas fa-tachometer-alt mr-2"></i>
+                        Mon Tableau de bord
+                    </a>
+                    <a href="{{ url_for('ai_assistant_page') }}" class="duolingo-button duolingo-button-secondary">
+                        <i class="fas fa-robot mr-2"></i>
+                        Assistant IA
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('register') }}" class="duolingo-button">
+                        <i class="fas fa-user-plus mr-2"></i>
+                        Commencer maintenant
+                    </a>
+                    <a href="{{ url_for('leaderboard_page') }}" class="duolingo-button duolingo-button-secondary">
+                        <i class="fas fa-trophy mr-2"></i>
+                        Voir les classements
+                    </a>
+                {% endif %}
+            </div>
+            
+            <!-- Statistiques en temps réel -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                <div class="duolingo-card p-4">
+                    <div class="text-2xl font-bold text-green-500 live-stat" data-stat="total_calculations">
+                        {{ stats.total_calculations or 0 }}
+                    </div>
+                    <div class="text-sm text-gray-600">Calculs effectués</div>
+                </div>
+                <div class="duolingo-card p-4">
+                    <div class="text-2xl font-bold text-blue-500 live-stat" data-stat="active_users">
+                        {{ stats.active_users or 0 }}
+                    </div>
+                    <div class="text-sm text-gray-600">Utilisateurs actifs</div>
+                </div>
+                <div class="duolingo-card p-4">
+                    <div class="text-2xl font-bold text-purple-500 live-stat" data-stat="total_badges">
+                        {{ stats.total_badges or 0 }}
+                    </div>
+                    <div class="text-sm text-gray-600">Badges débloqués</div>
+                </div>
+                <div class="duolingo-card p-4">
+                    <div class="text-2xl font-bold text-orange-500">4.9</div>
+                    <div class="text-sm text-gray-600">Note moyenne</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Calculatrices populaires -->
+<section class="py-16 px-4">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12 slide-in">
+            Calculatrices populaires
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Calculatrice Crédit Immobilier -->
+            <div class="duolingo-card p-6 slide-in cursor-pointer" onclick="navigateToCalculator('mortgage')">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 rounded-xl bg-green-100 mr-4">
+                        <i class="fas fa-home text-green-600 text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg text-gray-800">Crédit Immobilier</h3>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <span class="text-sm text-gray-600">4.9 • 2,547 utilisateurs</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="text-gray-600 mb-4">
+                    Calculez vos mensualités, coût total et tableau d'amortissement 
+                    avec l'aide de votre agent IA personnel.
+                </p>
+                
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-bolt text-orange-500"></i>
+                        <span class="text-sm font-bold text-orange-500">+50 XP</span>
+                    </div>
+                    <div class="text-sm text-gray-500">Facile</div>
+                </div>
+            </div>
+            
+            <!-- Calculatrice Investissement -->
+            <div class="duolingo-card p-6 slide-in cursor-pointer" onclick="navigateToCalculator('investment')">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 rounded-xl bg-blue-100 mr-4">
+                        <i class="fas fa-chart-line text-blue-600 text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg text-gray-800">Investissement</h3>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <span class="text-sm text-gray-600">4.8 • 1,893 utilisateurs</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="text-gray-600 mb-4">
+                    Simulez vos placements et optimisez votre portefeuille 
+                    avec des conseils IA personnalisés.
+                </p>
+                
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-bolt text-orange-500"></i>
+                        <span class="text-sm font-bold text-orange-500">+75 XP</span>
+                    </div>
+                    <div class="text-sm text-gray-500">Moyen</div>
+                </div>
+            </div>
+            
+            <!-- Calculatrice Retraite -->
+            <div class="duolingo-card p-6 slide-in cursor-pointer" onclick="navigateToCalculator('retirement')">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 rounded-xl bg-purple-100 mr-4">
+                        <i class="fas fa-piggy-bank text-purple-600 text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg text-gray-800">Retraite</h3>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <span class="text-sm text-gray-600">4.7 • 1,256 utilisateurs</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="text-gray-600 mb-4">
+                    Estimez votre pension et planifiez votre retraite 
+                    avec des projections IA avancées.
+                </p>
+                
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-bolt text-orange-500"></i>
+                        <span class="text-sm font-bold text-orange-500">+100 XP</span>
+                    </div>
+                    <div class="text-sm text-gray-500">Difficile</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Section Agent IA -->
+<section class="py-16 px-4 bg-gradient-to-br from-blue-50 to-purple-50">
+    <div class="max-w-7xl mx-auto text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6 slide-in">
+            Assistant IA Financier Intégré
+        </h2>
+        
+        <p class="text-xl text-gray-600 mb-12 max-w-3xl mx-auto slide-in">
+            Notre agent IA intelligent vous accompagne dans tous vos calculs financiers, 
+            répond à vos questions et vous donne des conseils personnalisés basés sur votre profil.
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="duolingo-card p-6 slide-in">
+                <div class="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-robot text-blue-600 text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2">Agent IA Intelligent</h3>
+                <p class="text-gray-600">Assistance personnalisée pour tous vos besoins financiers</p>
+            </div>
+            
+            <div class="duolingo-card p-6 slide-in">
+                <div class="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-comments text-green-600 text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2">Chat en Temps Réel</h3>
+                <p class="text-gray-600">Conversations fluides avec votre assistant IA</p>
+            </div>
+            
+            <div class="duolingo-card p-6 slide-in">
+                <div class="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-brain text-purple-600 text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2">Apprentissage Adaptatif</h3>
+                <p class="text-gray-600">L'IA s'adapte à votre niveau et vos besoins</p>
+            </div>
+            
+            <div class="duolingo-card p-6 slide-in">
+                <div class="w-16 h-16 bg-orange-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-lightbulb text-orange-600 text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2">Conseils Personnalisés</h3>
+                <p class="text-gray-600">Recommandations basées sur votre profil financier</p>
+            </div>
+        </div>
+        
+        {% if not user_logged_in %}
+        <div class="mt-12">
+            <a href="{{ url_for('register') }}" class="duolingo-button">
+                <i class="fas fa-robot mr-2"></i>
+                Essayer l'Assistant IA
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Section gamification -->
+<section class="py-16 px-4">
+    <div class="max-w-7xl mx-auto text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6 slide-in">
+            Apprenez en vous amusant
+        </h2>
+        
+        <p class="text-xl text-gray-600 mb-12 max-w-3xl mx-auto slide-in">
+            Notre système de gamification vous motive à utiliser nos calculatrices 
+            et à améliorer vos connaissances financières jour après jour.
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="duolingo-card p-8 slide-in">
+                <div class="w-16 h-16 bg-orange-100 rounded-xl flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-bolt text-orange-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Système de points</h3>
+                <p class="text-gray-600">Gagnez des XP à chaque calcul et débloquez de nouveaux niveaux</p>
+            </div>
+            
+            <div class="duolingo-card p-8 slide-in">
+                <div class="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-trophy text-green-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Badges et récompenses</h3>
+                <p class="text-gray-600">Collectionnez des badges uniques selon vos accomplissements</p>
+            </div>
+            
+            <div class="duolingo-card p-8 slide-in">
+                <div class="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-users text-purple-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Classements</h3>
+                <p class="text-gray-600">Comparez-vous aux autres utilisateurs et gravissez les échelons</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Témoignages -->
+<section class="py-16 px-4 bg-gray-50">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12 slide-in">
+            Ce que disent nos utilisateurs
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="duolingo-card p-6 slide-in">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
+                        M
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800">Marie Dubois</h4>
+                        <div class="flex items-center gap-1">
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-gray-600 italic">
+                    "L'agent IA est fantastique ! Il m'a aidé à comprendre mes investissements 
+                    et le système de badges me motive vraiment à continuer."
+                </p>
+            </div>
+            
+            <div class="duolingo-card p-6 slide-in">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
+                        P
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800">Pierre Martin</h4>
+                        <div class="flex items-center gap-1">
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-gray-600 italic">
+                    "Les calculatrices sont très précises et l'assistant IA me donne 
+                    des conseils personnalisés excellents. Je recommande !"
+                </p>
+            </div>
+            
+            <div class="duolingo-card p-6 slide-in">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
+                        S
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800">Sophie Laurent</h4>
+                        <div class="flex items-center gap-1">
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <i class="fas fa-star text-yellow-400"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-gray-600 italic">
+                    "Interface magnifique et très intuitive. L'agent IA m'a aidé à 
+                    optimiser mon crédit immobilier et j'ai gagné plein de badges !"
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Final -->
+<section class="py-16 px-4 bg-gradient-to-br from-green-500 to-blue-600">
+    <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 slide-in">
+            Prêt à maîtriser vos finances ?
+        </h2>
+        <p class="text-xl text-green-100 mb-8 slide-in">
+            Rejoignez les milliers d'utilisateurs qui améliorent leurs connaissances financières 
+            chaque jour avec notre agent IA et notre système gamifié.
+        </p>
+        
+        {% if not user_logged_in %}
+        <div class="flex flex-col sm:flex-row gap-4 justify-center slide-in">
+            <a href="{{ url_for('register') }}" class="bg-white text-green-600 hover:bg-gray-100 font-bold py-4 px-8 rounded-xl text-lg transition-all duration-300 transform hover:scale-105">
+                <i class="fas fa-rocket mr-2"></i>
+                Commencer gratuitement
+            </a>
+            <a href="{{ url_for('ai_assistant_page') }}" class="border-2 border-white text-white hover:bg-white hover:text-green-600 font-bold py-4 px-8 rounded-xl text-lg transition-all duration-300 transform hover:scale-105">
+                <i class="fas fa-robot mr-2"></i>
+                Découvrir l'agent IA
+            </a>
+        </div>
+        {% else %}
+        <div class="slide-in">
+            <a href="{{ url_for('dashboard') }}" class="bg-white text-green-600 hover:bg-gray-100 font-bold py-4 px-8 rounded-xl text-lg transition-all duration-300 transform hover:scale-105">
+                <i class="fas fa-tachometer-alt mr-2"></i>
+                Retour au tableau de bord
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Navigation vers les calculatrices
+    function navigateToCalculator(type) {
+        const userLoggedIn = {% if user_logged_in %}true{% else %}false{% endif %};
+        if (userLoggedIn) {
+            window.location.href = `/calculators/${type}`;
+        } else {
+            showNotification('Veuillez vous connecter pour utiliser les calculatrices', 'info');
+            setTimeout(() => {
+                window.location.href = "{{ url_for('login') }}";
+            }, 2000);
+        }
+    }
+    
+    // Animation au scroll
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+    
+    // Observer tous les éléments avec la classe slide-in
+    document.addEventListener('DOMContentLoaded', () => {
+        const slideElements = document.querySelectorAll('.slide-in');
+        slideElements.forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    });
+    
+         // Démo interactive des notifications
+     setTimeout(() => {
+         const userLoggedIn = {% if user_logged_in %}true{% else %}false{% endif %};
+         if (!userLoggedIn) {
+             showNotification('💡 Astuce : Créez un compte pour débloquer toutes les fonctionnalités !', 'info');
+         }
+     }, 3000);
+</script>
+{% endblock %}
