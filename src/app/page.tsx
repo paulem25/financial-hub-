@@ -38,10 +38,13 @@ export default function HomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <button className="bg-duolingo-green hover:bg-primary-600 text-white font-bold py-4 px-8 rounded-xl text-lg transition-all duration-300 transform hover:scale-105 shadow-duolingo">
+            <a 
+              href="/dcf"
+              className="bg-duolingo-green hover:bg-primary-600 text-white font-bold py-4 px-8 rounded-xl text-lg transition-all duration-300 transform hover:scale-105 shadow-duolingo inline-block"
+            >
               <Calculator className="inline-block mr-2 w-5 h-5" />
-              Commencer maintenant
-            </button>
+              Calculatrice DCF NASDAQ
+            </a>
             <button className="border-2 border-duolingo-green text-duolingo-green hover:bg-duolingo-green hover:text-white font-bold py-4 px-8 rounded-xl text-lg transition-all duration-300 transform hover:scale-105">
               <Trophy className="inline-block mr-2 w-5 h-5" />
               Voir les classements
